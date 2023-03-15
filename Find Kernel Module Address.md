@@ -213,6 +213,6 @@ Here we use keyboard class driver (**kbdclass.sys**) as a example:
 extern POBJECT_TYPE IoDriverObjectType;
 UNICODE_STRING kbdName = RTL_CONSTANT_STRING(L"\\Driver\\kbdclass");
 PDRIVER_OBJECT pKbdDriverObject;
-ObReferenceObjectByName(&kbdName,OBJ_CASE_INSENSITIVE,NULL,0,IoDriverObjectType, KernelMode, NULL, &pKbdDriverObject);
+ObReferenceObjectByName(&kbdName, OBJ_CASE_INSENSITIVE, NULL, 0, IoDriverObjectType, KernelMode, NULL, &pKbdDriverObject);
 ```
 After we get the driver object pointer of specified driver, we can retrieve the `KLDR_LOAD_TABLE_ENTRY` structure through the `DriverSection` field and get some useful information including its base address.
