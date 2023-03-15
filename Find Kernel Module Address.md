@@ -17,7 +17,7 @@ The first parameter `SystemInformationClass` indicates what information the func
 
 First we pass 0 to `SystemInformation` buffer to get accurate size of this information, allocate memory respectively and query system information.
 ```C++ 
-status = ZwQuerySystemInformation( SystemModuleInformation, 0, bytes, &bytes);
+status = ZwQuerySystemInformation(SystemModuleInformation, 0, bytes, &bytes);
 pMods = (PSYSTEM_MODULE_INFORMATION)ExAllocatePoolWithTag(NonPagedPool, bytes,'tag');
 RtlZeroMemory(pMods, bytes);
 status = ZwQuerySystemInformation(SystemModuleInformation, pMods, bytes, &bytes );
@@ -63,7 +63,7 @@ for(ULONG i = 0; i < pMods->NumberOfModules; i++){
 ```
 Alternatively, if you have some data or function address belonging to a certain module, we can use it to get the module base address.
 ```C++
-for  (ULONG i =  0; i < pMods->NumberOfModules; i++){
+for(ULONG i =  0; i < pMods->NumberOfModules; i++){
 	// System routine is inside module
 	// checkPtr is an address within a module
 	if  (checkPtr >= pMod[i].ImageBase &&checkPtr < (PVOID)((PUCHAR)pMod[i].ImageBase + pMod[i].ImageSize)){
@@ -79,9 +79,9 @@ Method 1.5: Query system information (Aux_Klib)[](#method-1.5-query-system-infor
 Just like method 1 MS has provided another query function named `AuxKlibQueryModuleInformation` which belongs to the lib `Aux_Klib`( **Note** you have to add it to link manually) to query **ONLY** system module information. This function is declared as below ( [see msdn pages for details](https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/aux_klib/nf-aux_klib-auxklibquerymoduleinformation) ):
 ```C++
 NTSTATUS AuxKlibQueryModuleInformation(
-PULONG BufferSize,
-ULONG ElementSize,
-PVOID QueryInfo
+	PULONG BufferSize,
+	ULONG ElementSize,
+	PVOID QueryInfo
 );
 ```
 To use this function, we must call function `AuxKlibInitialize` first (which is needed in any function call in **Aux_Klib** )
@@ -106,12 +106,12 @@ typedef  struct  _AUX_MODULE_BASIC_INFO{
 	PVOID ImageBase;
 } AUX_MODULE_BASIC_INFO,  *PAUX_MODULE_BASIC_INFO;
 
-typedef  struct  _AUX_MODULE_EXTENDED_INFO{
+typedef  struct _AUX_MODULE_EXTENDED_INFO{
 	AUX_MODULE_BASIC_INFO BasicInfo;
 	ULONG ImageSize;
 	USHORT FileNameOffset;
 	UCHAR FullPathName [AUX_KLIB_MODULE_PATH_LEN];
-} AUX_MODULE_EXTENDED_INFO,  *PAUX_MODULE_EXTENDED_INFO;
+} AUX_MODULE_EXTENDED_INFO, *PAUX_MODULE_EXTENDED_INFO;
 ```
 So we can use these information to find any specified system module.
 
@@ -157,13 +157,13 @@ So the basic idea is to start from the list block of our driver, then traverse t
 // Get kernel base address already
 // Get PsLoadedModuleList address
 for(PLIST_ENTRY pListEntry = pThisModule->InLoadOrderLinks.Flink; pListEntry !=  &pThisModule->InLoadOrderLinks; pListEntry = pListEntry->Flink){
-// Search for Ntoskrnl entry
+	// Search for Ntoskrnl entry
 	PKLDR_DATA_TABLE_ENTRY pEntry = CONTAINING_RECORD(pListEntry, KLDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
 	if(kernelBase == pEntry->DllBase){
-// Ntoskrnl is always first entry in the list
-// So the previous entry is the PsLoadedModuleList
-// Check if found pointer belongs to Ntoskrnl module
-		if((PVOID)pListEntry->Blink >= pEntry->DllBase && (PUCHAR)pListEntry->Blink <  (PUCHAR)pEntry->DllBase + pEntry->SizeOfImage){
+	// Ntoskrnl is always first entry in the list
+	// So the previous entry is the PsLoadedModuleList
+	// Check if found pointer belongs to Ntoskrnl module
+		if((PVOID)pListEntry->Blink >= pEntry->DllBase && (PUCHAR)pListEntry->Blink < (PUCHAR)pEntry->DllBase + pEntry->SizeOfImage){
 			PsLoadedModuleList = pListEntry->Blink;
 			break;
 		}
@@ -183,7 +183,7 @@ if(IsListEmpty(PsLoadedModuleList))
 for(PLIST_ENTRY pListEntry = PsLoadedModuleList->Flink; pListEntry != PsLoadedModuleList; pListEntry = pListEntry->Flink){
 PKLDR_DATA_TABLE_ENTRY pEntry = CONTAINING_RECORD(pListEntry, KLDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
 // Check by name or by address
-	if((pName &&  RtlCompareUnicodeString(  &pEntry->BaseDllName, pName, TRUE )  ==  0)  ||
+	if((pName &&  RtlCompareUnicodeString(&pEntry->BaseDllName, pName, TRUE )  ==  0)  ||
 	(pAddress && pAddress >= pEntry->DllBase &&  (PUCHAR)pAddress <  (PUCHAR)pEntry->DllBase + pEntry->SizeOfImage)){
 		return pEntry;
 	}
@@ -211,7 +211,7 @@ Here we use keyboard class driver (**kbdclass.sys**) as a example:
 ```C++
 // Declare the driver type explicitly
 extern POBJECT_TYPE IoDriverObjectType;
-UNICODE_STRING kbdName =  RTL_CONSTANT_STRING(L"\\Driver\\kbdclass");
+UNICODE_STRING kbdName = RTL_CONSTANT_STRING(L"\\Driver\\kbdclass");
 PDRIVER_OBJECT pKbdDriverObject;
 ObReferenceObjectByName(&kbdName,OBJ_CASE_INSENSITIVE,NULL,0,IoDriverObjectType, KernelMode, NULL, &pKbdDriverObject);
 ```
