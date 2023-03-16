@@ -1,8 +1,7 @@
 ## FAQ - Anti-Cheats, Bypasses and Hardware IDs
 
-**To begin, this is just to help all the new comers to the site rather then helping the people who have already been here for quite some time. Feel free to correct me anywhere you think i am wrong. Leave your thoughts in the comments as well, and leave +rep if it helped!**
-  
-Warning: I will be using other sources to help me. i will just list the important things, click on Credits for the link!!**   
+**To begin, this is just to help all the new comers to the site rather then helping the people who have already been here for quite some time. Feel free to correct me anywhere you think i am wrong. Leave your thoughts in the comments as well, and leave +rep if it helped!
+  Warning: I will be using other sources to help me. i will just list the important things, click on Credits for the link!!**   
   
 ***HWID***  
   
