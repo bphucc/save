@@ -15,6 +15,7 @@
 - Getting HWID Flagged by a Anti Cheat means alot of things. Some Anti Cheat like used in Rainbow 6, what they do is basically, if you got banned before they gather your hwid and store it in their servers. This will basically make it so that if you trigger maybe 3 detection or something the anti cheat thinks that you are doing wrong, you will get banned compared to maybe 5 detection compared to normal users with their HWID not Flagged. Anti Cheat also does other things like HWID bans and such, but this is quite debatable among different anti cheats.  
   
 Extra:  [https://www.webopedia.com/TERM/H/HWID.html](https://www.webopedia.com/TERM/H/HWID.html)
+
 ***Where To Start Coding?***  
   
 -Alright, to start off, i will list websites, videos and books for people. please note that programming isnt something you can learn overnight, its something which you need to spend time and efforts into learning it. it will take time and it may seem boring at first, but learning it or making something successful will definitely be exciting and worth while.  
